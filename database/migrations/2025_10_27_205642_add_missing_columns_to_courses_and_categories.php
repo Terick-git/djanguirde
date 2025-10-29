@@ -8,47 +8,40 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Ajouter les colonnes manquantes à la table courses
-        Schema::table('courses', function (Blueprint $table) {
-            if (!Schema::hasColumn('courses', 'duration')) {
-                $table->integer('duration')->default(0)->after('level');
+        Schema::table('users', function (Blueprint $table) {
+            // Vérifier et ajouter chaque colonne seulement si elle n'existe pas
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->enum('role', ['student', 'teacher', 'admin'])->default('student');
             }
-            if (!Schema::hasColumn('courses', 'video_count')) {
-                $table->integer('video_count')->default(0)->after('duration');
+            if (!Schema::hasColumn('users', 'bio')) {
+                $table->text('bio')->nullable();
             }
-            if (!Schema::hasColumn('courses', 'view_count')) {
-                $table->integer('view_count')->default(0)->after('video_count');
+            if (!Schema::hasColumn('users', 'specialization')) {
+                $table->string('specialization')->nullable();
             }
-            if (!Schema::hasColumn('courses', 'rating')) {
-                $table->decimal('rating', 3, 2)->default(0)->after('view_count');
+            if (!Schema::hasColumn('users', 'access_code')) {
+                $table->string('access_code')->nullable();
             }
-            if (!Schema::hasColumn('courses', 'order')) {
-                $table->integer('order')->default(0)->after('rating');
+            if (!Schema::hasColumn('users', 'settings')) {
+                $table->json('settings')->nullable();
             }
-            if (!Schema::hasColumn('courses', 'objectives')) {
-                $table->json('objectives')->nullable()->after('order');
-            }
-            if (!Schema::hasColumn('courses', 'requirements')) {
-                $table->json('requirements')->nullable()->after('objectives');
-            }
-        });
-
-        // Ajouter icon à categories
-        Schema::table('categories', function (Blueprint $table) {
-            if (!Schema::hasColumn('categories', 'icon')) {
-                $table->string('icon')->default('fas fa-book')->after('color');
+            if (!Schema::hasColumn('users', 'last_login')) {
+                $table->timestamp('last_login')->nullable();
             }
         });
     }
 
     public function down(): void
     {
-        Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn(['duration', 'video_count', 'view_count', 'rating', 'order', 'objectives', 'requirements']);
-        });
-
-        Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('icon');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn([
+                'role', 
+                'bio', 
+                'specialization', 
+                'access_code', 
+                'settings', 
+                'last_login'
+            ]);
         });
     }
 };

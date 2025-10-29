@@ -4,7 +4,7 @@
         <header class="main-header">
             <div class="header-content">
                 <div class="title-search-container">
-                    <h1 class="page-title" style="color: black;">Nos Cours</h1>
+                    <h1 class="page-title" style="color: black;">               Course</h1>
                     <div class="search-filter-container">
                         <div class="search-bar">
                             <i class="fas fa-search"></i>

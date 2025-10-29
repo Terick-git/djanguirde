@@ -1,4 +1,5 @@
 <?php
+// routes/web.php - NOUVELLE VERSION
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CourseController;
@@ -19,15 +20,14 @@ Route::get('/courses', [CourseController::class, 'index'])->name('courses.index'
 Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('courses.show');
 
 // Routes d'authentification Breeze
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
 
 // Routes protégées - REDIRECTION BASÉE SUR LE RÔLE
 Route::middleware('auth')->group(function () {
     // Redirection intelligente selon le rôle
     Route::get('/dashboard', function () {
         $user = auth()->user();
-
-        // Assurez-vous que les méthodes isAdmin() et isTeacher() existent sur votre modèle User
+        
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard');
         } elseif ($user->isTeacher()) {
@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('student.dashboard');
         }
     })->name('dashboard');
-
+    
     // Profile (accessible à tous les rôles)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
